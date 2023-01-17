@@ -15,11 +15,11 @@ export default async function (req, res) {
     return;
   }
 
-  const animal = req.body.animal || '';
-  if (animal.trim().length === 0) {
+  const question = req.body.question || '';
+  if (question.trim().length === 0) {
     res.status(400).json({
       error: {
-        message: "Please enter a valid animal",
+        message: "Please enter a valid question",
       }
     });
     return;
@@ -28,8 +28,8 @@ export default async function (req, res) {
   try {
     const completion = await openai.createCompletion({
       model: "text-davinci-003",
-      prompt: animal,
-      max_tokens: 150,
+      prompt: question,
+      max_tokens: 1450,
     });
     res.status(200).json({ result: completion.data.choices[0].text });
   } catch(error) {
@@ -48,15 +48,15 @@ export default async function (req, res) {
   }
 }
 
-function generatePrompt(animal) {
-  const capitalizedAnimal =
-    animal[0].toUpperCase() + animal.slice(1).toLowerCase();
-  return `Suggest three names for an animal that is a superhero.
+function generatePrompt(question) {
+  const capitalizedquestion =
+    question[0].toUpperCase() + question.slice(1).toLowerCase();
+  return `Suggest three names for an question that is a superhero.
 
-Animal: Cat
+question: Cat
 Names: Captain Sharpclaw, Agent Fluffball, The Incredible Feline
-Animal: Dog
+question: Dog
 Names: Ruff the Protector, Wonder Canine, Sir Barks-a-Lot
-Animal: ${capitalizedAnimal}
+question: ${capitalizedquestion}
 Names:`;
 }
